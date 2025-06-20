@@ -104,4 +104,6 @@ Contributions are welcome! Please ensure:
 - Public API changes are clearly documented
 - 
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) — Made with ❤️ for video game enthusiasts!
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) 
+
+Made with ❤️ for video game enthusiasts!
