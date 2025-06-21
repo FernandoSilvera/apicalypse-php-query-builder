@@ -10,6 +10,8 @@ Install via Composer:
 
     composer require apicalypse/php-query-builder
 
+[![Latest Version](https://img.shields.io/packagist/v/apicalypse/php-query-builder.svg)](https://packagist.org/packages/apicalypse/php-query-builder)
+
 ## Features
 
 - Select and exclude fields
@@ -102,8 +104,6 @@ Contributions are welcome! Please ensure:
 - PSR-12 coding standards
 - Tests cover new features or edge cases
 - Public API changes are clearly documented
-
-[![Latest Version](https://img.shields.io/packagist/v/apicalypse/php-query-builder.svg)](https://packagist.org/packages/apicalypse/php-query-builder)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
