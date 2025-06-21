@@ -3,7 +3,3 @@
 /phpunit.xml         export-ignore
 /.github             export-ignore
 /composer.lock       export-ignore
-
-# Keep these for Composer and Packagist
-README.md            export-ignore
-CHANGELOG.md         export-ignore
