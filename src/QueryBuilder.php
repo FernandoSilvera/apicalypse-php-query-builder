@@ -18,7 +18,7 @@ class QueryBuilder
     public const ERROR_CONDITION_WHERE_NOT_INITIAL = 'Initial where condition is already set.';
     public const ERROR_CONDITION_ORWHERE_FIRST = 'Cannot start conditions with orWhere.';
     private bool $strictMode;
-    private array $select = [];
+    private array $fields = [];
     private array $exclude = [];
     private array $conditions = [];
     private array $sort = [];
@@ -67,22 +67,22 @@ class QueryBuilder
         return $this;
     }
 
-    public function getSelectedFields(): array
+    public function getFields(): array
     {
-        return $this->select;
+        return $this->fields;
     }
 
     /**
      * @throws InvalidArgumentException if fields[] is empty or one field is empty or blank.
      */
-    public function select(string ...$fields): self
+    public function fields(string ...$fields): self
     {
         if (empty($fields)) {
             throw new InvalidArgumentException("fields cannot be empty");
         }
 
         if (count($fields) === 1 && $fields[0] === '*') {
-            $this->select = ['*'];
+            $this->fields = ['*'];
             return $this;
         }
 
@@ -90,21 +90,21 @@ class QueryBuilder
             $fields[$i] = $this->validateAndTrimDotField($field);
         }
 
-        $this->select = $fields;
+        $this->fields = $fields;
         return $this;
     }
 
     /**
-     * Add fields to the existing select list.
+     * Add fields to the existing fields list.
      *
-     * Unlike select(), which replaces the entire selection,
+     * Unlike fields(), which replaces the entire selection,
      * this method appends new fields to the current list,
      * ensuring no duplicates.
      *
      * @throws InvalidArgumentException if no fields are passed
      *         or any field is empty or blank.
      */
-    public function addSelect(string ...$fields): self
+    public function addFields(string ...$fields): self
     {
         if (empty($fields)) {
             throw new InvalidArgumentException("fields cannot be empty");
@@ -114,7 +114,7 @@ class QueryBuilder
             $fields[$i] = $this->validateAndTrimDotField($field);
         }
 
-        $this->select = array_unique([...$this->select, ...$fields]);
+        $this->fields = array_unique([...$this->fields, ...$fields]);
         return $this;
     }
 
@@ -352,8 +352,8 @@ class QueryBuilder
     {
         $parts = [];
 
-        if (!empty($this->select)) {
-            $parts[] = 'fields ' . implode(',', $this->select) . ';';
+        if (!empty($this->fields)) {
+            $parts[] = 'fields ' . implode(',', $this->fields) . ';';
         }
 
         if (!empty($this->exclude)) {
@@ -390,7 +390,7 @@ class QueryBuilder
      */
     public function clear(): self
     {
-        $this->select = $this->exclude = $this->conditions = $this->sort = [];
+        $this->fields = $this->exclude = $this->conditions = $this->sort = [];
         $this->limit = $this->offset = $this->searchTerm = null;
 
         return $this;

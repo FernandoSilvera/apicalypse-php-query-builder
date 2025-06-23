@@ -36,94 +36,94 @@ class QueryBuilderTest extends TestCase
         $this->assertTrue($builder->isStrictModeEnabled());
     }
 
-    public function testGetSelectedFieldsOnDefaultInit(): void
+    public function testGetFieldsOnDefaultInit(): void
     {
         $builder = (new QueryBuilder());
-        $this->assertEmpty($builder->getSelectedFields());
+        $this->assertEmpty($builder->getFields());
     }
 
-    public function testSelect(): void
+    public function testFields(): void
     {
         $builder = (new QueryBuilder())
-            ->select('id', 'name', 'game.release', 'game.release.date.day');
+            ->fields('id', 'name', 'game.release', 'game.release.date.day');
 
-        $this->assertSame(['id', 'name', 'game.release', 'game.release.date.day'], $builder->getSelectedFields());
+        $this->assertSame(['id', 'name', 'game.release', 'game.release.date.day'], $builder->getFields());
     }
 
-    public function testSelectOverride(): void
+    public function testFieldsOverride(): void
     {
         $builder = (new QueryBuilder())
-            ->select('id')
-            ->select('title');
+            ->fields('id')
+            ->fields('title');
 
-        $this->assertSame(['title'], $builder->getSelectedFields());
+        $this->assertSame(['title'], $builder->getFields());
     }
 
-    public function testAddSelectAfterAddSelect(): void
+    public function testAddFieldsAfterAddFields(): void
     {
         $builder = (new QueryBuilder())
-            ->addSelect('id', 'name')
-            ->select('email', 'name');
+            ->addFields('id', 'name')
+            ->fields('email', 'name');
 
-        $this->assertSame(['email', 'name'], $builder->getSelectedFields());
+        $this->assertSame(['email', 'name'], $builder->getFields());
     }
 
-    public function testSelectThrowsExceptionWhenEmpty(): void
+    public function testFieldsThrowsExceptionWhenEmpty(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        (new QueryBuilder())->select();
+        (new QueryBuilder())->fields();
     }
 
-    public function testSelectThrowsExceptionOnEmptyField(): void
+    public function testFieldsThrowsExceptionOnEmptyField(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        (new QueryBuilder())->select('id', 'name', '');
+        (new QueryBuilder())->fields('id', 'name', '');
     }
 
-    public function testSelectWithWildcard(): void
+    public function testFieldsWithWildcard(): void
     {
         $builder = (new QueryBuilder())
-            ->select('*');
+            ->fields('*');
 
-        $this->assertSame(['*'], $builder->getSelectedFields());
+        $this->assertSame(['*'], $builder->getFields());
     }
 
-    public function testAddSelect(): void
+    public function testAddFields(): void
     {
         $builder = (new QueryBuilder())
-            ->addSelect('id', 'name');
+            ->fields('id', 'name');
 
-        $this->assertSame(['id', 'name'], $builder->getSelectedFields());
+        $this->assertSame(['id', 'name'], $builder->getFields());
     }
 
-    public function testAddSelectChaining(): void
+    public function testAddFieldsChaining(): void
     {
         $builder = (new QueryBuilder())
-            ->addSelect('id', 'name')
-            ->addSelect('email', 'phone');
+            ->addFields('id', 'name')
+            ->addFields('email', 'phone');
 
-        $this->assertSame(['id', 'name', 'email', 'phone'], $builder->getSelectedFields());
+        $this->assertSame(['id', 'name', 'email', 'phone'], $builder->getFields());
     }
 
-    public function testAddSelectAppendsDuplicateFields(): void
+    public function testAddFieldsAppendsDuplicateFields(): void
     {
         $builder = (new QueryBuilder())
-            ->select('id', 'name')
-            ->addSelect('email', 'name');
+            ->fields('id', 'name')
+            ->addFields('email', 'name');
 
-        $this->assertSame(['id', 'name', 'email'], $builder->getSelectedFields());
+        $this->assertSame(['id', 'name', 'email'], $builder->getFields());
     }
 
-    public function testAddSelectThrowsExceptionWhenEmpty(): void
+    public function testAddFieldsThrowsExceptionWhenEmpty(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        (new QueryBuilder())->addSelect();
+        (new QueryBuilder())->addFields();
     }
 
-    public function testAddSelectThrowsExceptionOnEmptyField(): void
+    public function testAddFieldsThrowsExceptionOnEmptyField(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        (new QueryBuilder())->addSelect('id', '');
+        (new QueryBuilder())->addFields('id', '');
     }
 
     public function testGetExcludedFieldsOnDefaultInit(): void
@@ -631,7 +631,7 @@ class QueryBuilderTest extends TestCase
     public function testBuildWithFields(): void
     {
         $builder = (new QueryBuilder())
-            ->select('name', 'age');
+            ->fields('name', 'age');
 
         $this->assertSame('fields name,age;', $builder->build());
     }
@@ -704,7 +704,7 @@ class QueryBuilderTest extends TestCase
     public function testBuildWithAllComponents(): void
     {
         $builder = (new QueryBuilder())
-            ->select('name', 'age')
+            ->fields('name', 'age')
             ->exclude('created_at')
             ->where('age >= 18')
             ->andWhere('active = true')
@@ -730,7 +730,7 @@ class QueryBuilderTest extends TestCase
     public function testClearResetsAllProperties(): void
     {
         $builder = (new QueryBuilder())
-            ->select('name', 'age')
+            ->fields('name', 'age')
             ->exclude('created_at')
             ->where('age >= 18')
             ->andWhere('active = true')
@@ -748,15 +748,15 @@ class QueryBuilderTest extends TestCase
     public function testClearAllowsSettingNewValues(): void
     {
         $builder = (new QueryBuilder())
-            ->select('name')
+            ->fields('name')
             ->where('age > 18');
 
         $builder->clear()
-            ->select('email')
-            ->addSelect('first_name', 'last_name')
+            ->fields('email')
+            ->addFields('first_name', 'last_name')
             ->where('active = true');
 
-        $this->assertSame(['email', 'first_name', 'last_name'], $builder->getSelectedFields());
+        $this->assertSame(['email', 'first_name', 'last_name'], $builder->getFields());
         $this->assertSame([
             ['operator' => null, 'condition' => 'active = true']
         ], $builder->getConditions());
@@ -766,7 +766,7 @@ class QueryBuilderTest extends TestCase
     {
         $builder = new QueryBuilder();
 
-        $this->assertSame($builder, $builder->select('id')->addSelect('name')->where('id=1'));
+        $this->assertSame($builder, $builder->fields('id')->addFields('name')->where('id=1'));
     }
 
     /**
@@ -775,7 +775,7 @@ class QueryBuilderTest extends TestCase
     public function testToString(): void
     {
         $builder = (new QueryBuilder(true))
-            ->select('valid');
+            ->fields('valid');
 
         $this->assertSame('fields valid;', (string)$builder);
     }
@@ -800,12 +800,12 @@ class QueryBuilderTest extends TestCase
 
         (new QueryBuilder(true))
             ->enableStrictMode()
-            ->select('valid', '');
+            ->fields('valid', '');
     }
 
     private function assertBuilderIsEmpty(QueryBuilder $builder): void
     {
-        $this->assertEmpty($builder->getSelectedFields(), 'Selected fields should be empty.');
+        $this->assertEmpty($builder->getFields(), 'Selected fields should be empty.');
         $this->assertEmpty($builder->getExcludedFields(), 'Excluded fields should be empty.');
         $this->assertEmpty($builder->getConditions(), 'Conditions should be empty.');
         $this->assertEmpty($builder->getSortFields(), 'Sort fields should be empty.');
