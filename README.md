@@ -14,7 +14,7 @@ Install via Composer:
 
 ## Features
 
-- Select and exclude fields
+- Add and exclude fields
 - AND/OR conditional chaining
 - Comparison operator support
 - Pagination (limit + offset)
@@ -31,7 +31,7 @@ Install via Composer:
 
     $query = new QueryBuilder();
 
-    $query->select('name', 'release.date', 'game.platform.name')
+    $query->fields('name', 'release.date', 'game.platform.name')
         ->exclude('summary')
         ->where('rating > 80')
         ->andWhere(QueryBuilder::buildCondition('platforms', [6, 48], ComparisonOperator::CONTAINS_ANY))
@@ -76,8 +76,8 @@ In non-strict mode, `__toString()` catches build exceptions and returns:
 
 ## Public Methods
 
-- select(string ...$fields)
-- addSelect(string ...$fields)
+- fields(string ...$fields)
+- addFields(string ...$fields)
 - exclude(string ...$fields)
 - where(string $condition)
 - andWhere(string $condition)
