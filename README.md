@@ -95,7 +95,7 @@ In non-strict mode, `__toString()` catches build exceptions and returns:
 
 Run PHPUnit tests:
 
-    vendor/bin/phpunit
+    composer test
 
 ## Contributing
 
