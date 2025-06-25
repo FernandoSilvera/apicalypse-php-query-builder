@@ -61,7 +61,7 @@ class QueryBuilder
         return $this->strictMode;
     }
 
-    public function enableStrictMode(bool $enabled = true): self
+    public function enableStrictMode(bool $enabled = true): static
     {
         $this->strictMode = $enabled;
         return $this;
@@ -75,7 +75,7 @@ class QueryBuilder
     /**
      * @throws InvalidArgumentException if fields[] is empty or one field is empty or blank.
      */
-    public function fields(string ...$fields): self
+    public function fields(string ...$fields): static
     {
         if (empty($fields)) {
             throw new InvalidArgumentException("fields cannot be empty");
@@ -104,7 +104,7 @@ class QueryBuilder
      * @throws InvalidArgumentException if no fields are passed
      *         or any field is empty or blank.
      */
-    public function addFields(string ...$fields): self
+    public function addFields(string ...$fields): static
     {
         if (empty($fields)) {
             throw new InvalidArgumentException("fields cannot be empty");
@@ -126,7 +126,7 @@ class QueryBuilder
     /**
      * @throws InvalidArgumentException if fields[] is empty or one field is empty or blank.
      */
-    public function exclude(string ...$fields): self
+    public function exclude(string ...$fields): static
     {
         if (empty($fields)) {
             throw new InvalidArgumentException("fields cannot be empty");
@@ -151,7 +151,7 @@ class QueryBuilder
      * @throws InvalidArgumentException if condition is empty or blank.
      * @throws LogicException if a where() condition is already set.
      */
-    public function where(string $condition): self
+    public function where(string $condition): static
     {
         $condition = $this->validateAndTrimString(value: $condition, paramName: 'where condition');
 
@@ -168,7 +168,7 @@ class QueryBuilder
      *
      * @throws InvalidArgumentException if condition is empty or blank.
      */
-    public function andWhere(string $condition): self
+    public function andWhere(string $condition): static
     {
         $condition = $this->validateAndTrimString(value: $condition, paramName: 'andWhere condition');
 
@@ -188,7 +188,7 @@ class QueryBuilder
      * @throws InvalidArgumentException if condition is empty or blank.
      * @throws LogicException if this is the first condition.
      */
-    public function orWhere(string $condition): self
+    public function orWhere(string $condition): static
     {
         $condition = $this->validateAndTrimString(value: $condition, paramName: 'orWhere condition');
 
@@ -210,7 +210,7 @@ class QueryBuilder
      *
      * @throws InvalidArgumentException if field is empty or blank.
      */
-    public function sort(string $field, SortDirection $direction = SortDirection::ASC): self
+    public function sort(string $field, SortDirection $direction = SortDirection::ASC): static
     {
         $field = $this->validateAndTrimString(value: $field, paramName: 'sort field');
 
@@ -228,7 +228,7 @@ class QueryBuilder
      *
      * @throws InvalidArgumentException if limit is not a positive integer.
      */
-    public function limit(int $limit): self
+    public function limit(int $limit): static
     {
         QueryValidator::positiveInt($limit, 'limit');
 
@@ -246,7 +246,7 @@ class QueryBuilder
      *
      * @throws InvalidArgumentException if offset is not a non-negative integer.
      */
-    public function offset(int $offset): self
+    public function offset(int $offset): static
     {
         QueryValidator::nonNegativeInt($offset, 'offset');
 
@@ -263,7 +263,7 @@ class QueryBuilder
     /**
      * @throws InvalidArgumentException if term is empty or blank.
      */
-    public function search(string $term): self
+    public function search(string $term): static
     {
         $term = $this->validateAndTrimString(value: $term, paramName: 'search term');
 
@@ -388,7 +388,7 @@ class QueryBuilder
      * Clear the current query state.
      * Resets all properties to their initial state.
      */
-    public function clear(): self
+    public function clear(): static
     {
         $this->fields = $this->exclude = $this->conditions = $this->sort = [];
         $this->limit = $this->offset = $this->searchTerm = null;
